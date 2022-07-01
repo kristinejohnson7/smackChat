@@ -7,7 +7,7 @@ const URL_ACCOUNT = `${BASE_URL}/account`;
 const URL_LOGIN = `${URL_ACCOUNT}/login`;
 const URL_REGISTER = `${URL_ACCOUNT}/register`;
 
-const URL_USER = `${BASE_URL}/user`;
+const URL_USER = `${BASE_URL}/user/`;
 const URL_USER_ADD = `${URL_USER}/add`;
 const URL_USER_BY_EMAIL = `${URL_USER}/byEmail/`;
 
@@ -127,6 +127,16 @@ export class AuthService extends User {
       console.error(error);
     }
   }
+
+  async deleteUser() {
+    const headers = this.getBearerHeader();
+    try {
+      const response = await axios.delete(URL_USER + this.id, { headers });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
 
 export class ChatService {
@@ -241,6 +251,7 @@ export class SocketService {
   }
 
   getChatMessage(cb) {
+    console.log("get chat msg sent");
     this.socket.on(
       "messageCreated",
       (
@@ -272,18 +283,18 @@ export class SocketService {
           this.chatService.addToUnread(channelId);
         }
         this.chatService.messages = [...this.chatService.messages, chat];
-        let uniqueMessages = [];
-        this.chatService.messages.forEach((message) => {
-          if (
-            !uniqueMessages.find((uniqueMessage) => {
-              return uniqueMessage.id === message.id;
-            })
-          ) {
-            uniqueMessages.push(message);
-          }
-        });
-        console.log("unique", uniqueMessages);
-        this.chatService.messages = uniqueMessages;
+        // let uniqueMessages = [];
+        // this.chatService.messages.forEach((message) => {
+        //   if (
+        //     !uniqueMessages.find((uniqueMessage) => {
+        //       return uniqueMessage.id === message.id;
+        //     })
+        //   ) {
+        //     uniqueMessages.push(message);
+        //   }
+        // });
+        // console.log("unique", uniqueMessages);
+        // this.chatService.messages = uniqueMessages;
         cb(chat, this.chatService.messages);
       }
     );

@@ -30,7 +30,6 @@ const Channels = ({ unread }) => {
   }, []);
 
   useEffect(() => {
-    console.log("get channel set- memory leak :)");
     socketService.getChannel((channelList) => {
       setChannels(channelList);
     });

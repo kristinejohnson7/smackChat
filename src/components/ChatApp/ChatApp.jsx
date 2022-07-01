@@ -15,14 +15,14 @@ const ChatApp = () => {
   const [unreadChannels, setUnreadChannels] = useState([]);
 
   useEffect(() => {
-    console.log("established connection");
     socketService.establishConnection();
     return () => socketService.closeConnection();
   }, []);
 
   useEffect(() => {
+    let isCancelled = false;
     socketService.getChatMessage((newMessage, messages) => {
-      console.log("received msg on front-end");
+      if (isCancelled) return;
       if (newMessage.channelId === chatService.selectedChannel.id) {
         setChatMessages(messages);
       }
@@ -30,12 +30,27 @@ const ChatApp = () => {
         setUnreadChannels(chatService.unreadChannels);
       }
     });
+    return () => {
+      isCancelled = true;
+    };
   }, []);
 
   const logoutUser = () => {
     authService.logoutUser();
     setModal(false);
-    history.push("/login");
+    //fixed memory leak from old router not releasing socket io emitters
+    window.location = "/login";
+    // history.push("/login", {});
+  };
+
+  const deleteUser = () => {
+    const result = window.confirm(
+      "Are you sure you want to delete your account? This action cannot be undone."
+    );
+    if (result) {
+      authService.deleteUser().then(() => logoutUser());
+      // logoutUser();
+    }
   };
 
   return (
@@ -60,6 +75,9 @@ const ChatApp = () => {
         </div>
         <button onClick={logoutUser} className="submit-btn logout-btn">
           Logout
+        </button>
+        <button onClick={deleteUser} className="submit-btn delete-btn">
+          Delete User
         </button>
       </Modal>
     </div>
