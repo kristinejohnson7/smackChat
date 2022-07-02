@@ -4,9 +4,8 @@ import "./Channels.css";
 import Modal from "../Modal/Modal";
 import { toCamelCase } from "../../helpers/camelCase";
 
-const Channels = ({ unread }) => {
+const Channels = ({ unread, channels, setChannels }) => {
   const INIT = { name: "", description: "" };
-  const [channels, setChannels] = useState([]);
   const [unreadChannels, setUnreadChannels] = useState([]);
   const [newChannel, setNewChannel] = useState(INIT);
   const [modal, setModal] = useState(false);
