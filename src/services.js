@@ -11,9 +11,10 @@ const URL_USER = `${BASE_URL}/user/`;
 const URL_USER_ADD = `${URL_USER}/add`;
 const URL_USER_BY_EMAIL = `${URL_USER}/byEmail/`;
 
-const URL_GET_CHANNELS = `${BASE_URL}/channel`;
+const URL_GET_CHANNELS = `${BASE_URL}/channel/`;
 
 const URL_GET_MESSAGES = `${BASE_URL}/message/byChannel/`;
+const URL_GET_MSG = `${BASE_URL}/message/`;
 
 const headers = { "Content-Type": "application/json" };
 
@@ -137,6 +138,24 @@ export class AuthService extends User {
       console.error(error);
     }
   }
+
+  async updateUser({ name, email, avatarName, avatarColor }) {
+    const headers = this.getBearerHeader();
+    const body = {
+      name: name,
+      email: email,
+      avatarName: avatarName,
+      avatarColor: avatarColor,
+    };
+    try {
+      let response = await axios.put(URL_USER + this.id, body, { headers });
+      console.log("response", response);
+      // this.setUserData(response);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 }
 
 export class ChatService {
@@ -187,6 +206,7 @@ export class ChatService {
     try {
       let response = await axios.get(URL_GET_MESSAGES + channelId, { headers });
       response = response.data.map((msg) => ({
+        userId: msg.userId,
         messageBody: msg.messageBody,
         channelId: msg.channelId,
         id: msg._id,
@@ -200,6 +220,38 @@ export class ChatService {
     } catch (error) {
       console.error(error);
       this.messages = [];
+      throw error;
+    }
+  }
+
+  async deleteChannel(id) {
+    const headers = this.getAuthHeader();
+    try {
+      const response = await axios.delete(URL_GET_CHANNELS + id, { headers });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  async deleteMessage(id) {
+    const headers = this.getAuthHeader();
+    try {
+      const response = await axios.delete(URL_GET_MSG + id, { headers });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  async updateMessage(id, body) {
+    const headers = this.getAuthHeader();
+    try {
+      const response = await axios.put(URL_GET_MSG + id, body, { headers });
+    } catch (error) {
+      console.error(error);
       throw error;
     }
   }

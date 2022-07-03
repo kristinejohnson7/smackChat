@@ -1,0 +1,9 @@
+.create-avatar {
+  border-radius: 50%;
+  padding: 3px;
+}
+
+.themeBtnContainer {
+  display: flex;
+  gap: 10px;
+}

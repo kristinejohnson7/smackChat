@@ -1,0 +1,61 @@
+.defaultBtn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 80%;
+  margin: auto;
+  padding: 1.25rem 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 1.1;
+  transition: ease-in-out 0.3s;
+}
+
+.profileBtn {
+  background-color: rgba(1, 135, 135, 0.6);
+  color: white;
+  margin-bottom: 20px;
+}
+
+.submitBtn {
+  background-color: var(--secondary);
+  color: #036161;
+}
+
+.logoutBtn {
+  background: var(--primary);
+  color: white;
+}
+
+.deleteBtn {
+  background: #a3535b;
+  color: white;
+  margin-top: 20px;
+}
+
+.themeBtn {
+  background-color: rgba(1, 135, 135, 0.3);
+  width: 30%;
+  margin-bottom: 40px;
+}
+
+.themeBtn:focus {
+  background-color: var(--secondary-var);
+  color: white;
+}
+
+.logoutBtn:hover { background: var(--primary-nav) }
+
+.submitBtn:hover {
+  background: var(--secondary-var);
+  color: white;
+}
+
+.deleteBtn:hover { background: #721C24 }
+
+.profileBtn:hover, 
+.themeBtn:hover{
+  background: var(--secondary-var);
+}
+

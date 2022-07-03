@@ -4,9 +4,8 @@ import "./Channels.css";
 import Modal from "../Modal/Modal";
 import { toCamelCase } from "../../helpers/camelCase";
 
-const Channels = ({ unread }) => {
+const Channels = ({ unread, channels, setChannels }) => {
   const INIT = { name: "", description: "" };
-  const [channels, setChannels] = useState([]);
   const [unreadChannels, setUnreadChannels] = useState([]);
   const [newChannel, setNewChannel] = useState(INIT);
   const [modal, setModal] = useState(false);
@@ -57,10 +56,13 @@ const Channels = ({ unread }) => {
     <>
       <div className="channel">
         <div className="channel-header">
-          <h3 className="channel-label">{authService.name}</h3>
+          <h3 className="channel-label">{authService.name.toUpperCase()}</h3>
         </div>
         <h3 className="channel-label">
-          Channels <span onClick={() => setModal(true)}>Add +</span>
+          Channels{" "}
+          <span onClick={() => setModal(true)}>
+            <i class="fa-solid fa-plus" title="Add a channel"></i>
+          </span>
         </h3>
         <div className="channel-list">
           {!!channels.length ? (

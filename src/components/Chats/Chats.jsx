@@ -3,10 +3,16 @@ import "./Chats.css";
 import { UserContext } from "../../App";
 import UserAvatar from "../UserAvatar/UserAvatar";
 import { formatDate } from "../../helpers/dateFormat";
+import Message from "../Message/Message";
 
-const Chats = ({ chats }) => {
-  const { authService, chatService, appSelectedChannel, socketService } =
-    useContext(UserContext);
+const Chats = ({ chats, setChannels, channels }) => {
+  const {
+    authService,
+    chatService,
+    appSelectedChannel,
+    socketService,
+    appSetChannel,
+  } = useContext(UserContext);
   const [messages, setMessages] = useState([]);
   const [messageBody, setMessageBody] = useState("");
   const [typingMessage, setTypingMessage] = useState("");
@@ -69,46 +75,98 @@ const Chats = ({ chats }) => {
     setMessageBody("");
   };
 
+  const deleteChannel = () => {
+    chatService.deleteChannel(appSelectedChannel.id).then(() => {
+      chatService.findAllChannels().then((res) => {
+        setChannels(res);
+        appSetChannel(res[0]);
+      });
+    });
+    chatService.messages.filter((message) => {
+      if (message.channelId === appSelectedChannel.id) {
+        chatService.deleteMessage(message.id);
+      }
+    });
+  };
+
+  const deleteMessage = (msgId) => {
+    chatService.deleteMessage(msgId).then(() => {
+      chatService
+        .findAllMessagesForChannel(appSelectedChannel.id)
+        .then((res) => {
+          setMessages(res);
+        });
+    });
+  };
+
+  const handleUpdateMessage = (e, msgId) => {
+    e.preventDefault();
+    console.log("handle update message");
+    const fData = new FormData(e.target);
+    const message = {
+      ...chatService.messages.find((msg) => msg.id === msgId),
+      messageBody: fData.get("updatedMessage"),
+    };
+    chatService.updateMessage(msgId, message).then(() => {
+      console.log("then");
+      let newMessages = [];
+      messages.forEach((msg) => {
+        if (msg.id === msgId) {
+          newMessages.push(message);
+        } else {
+          newMessages.push(msg);
+        }
+      });
+      setMessages(newMessages);
+    });
+  };
+
   return (
-    <div className="chat">
-      <div className="chat-header">
-        <h3>#{appSelectedChannel.name} - </h3>
-        <h4>{appSelectedChannel.description}</h4>
-      </div>
-      <div className="chat-list">
-        {!!messages.length ? (
-          messages.map((msg) => (
-            <div key={msg.id} className="chat-message">
-              <UserAvatar
-                avatar={{
-                  avatarName: msg.userAvatar,
-                  avatarColor: msg.userAvatarColor,
-                }}
-                size="md"
-              />
-              <div className="chat-user">
-                <strong>{msg.userName}</strong>
-                <small>{formatDate(msg.timeStamp)}</small>
-                <div className="message-body">{msg.messageBody}</div>
-              </div>
-            </div>
-          ))
-        ) : (
-          <div>No Messages</div>
-        )}
-      </div>
-      <form onSubmit={sendMessage} className="chat-bar">
-        <div className="typing">{typingMessage}</div>
-        <div className="chat-wrapper">
-          <textarea
-            onChange={onTyping}
-            value={messageBody}
-            placeholder="type a message..."
-          />
-          <input type="submit" className="submit-btn" value="Send" />
+    channels.map((channel) => channel.id).includes(appSelectedChannel.id) && (
+      <div className="chat">
+        <div className="chat-header-container">
+          <div className="chat-header">
+            <h3>#{appSelectedChannel.name} - </h3>
+            <h4>{appSelectedChannel.description}</h4>
+          </div>
+          <div className="channel-delete-container">
+            <button
+              onClick={deleteChannel}
+              className="delete-ch-btn"
+              title="Delete Channel"
+            >
+              <i className="fa-solid fa-trash fa-lg"></i>
+            </button>
+          </div>
         </div>
-      </form>
-    </div>
+
+        <div className="chat-list">
+          {!!messages.length ? (
+            messages.map((msg) => (
+              <Message
+                msg={msg}
+                deleteMessage={deleteMessage}
+                formatDate={formatDate}
+                handleUpdateMessage={handleUpdateMessage}
+              />
+            ))
+          ) : (
+            <div>No Messages</div>
+          )}
+        </div>
+        <form onSubmit={sendMessage} className="chat-bar">
+          <div className="typing">{typingMessage}</div>
+          <div className="chat-wrapper">
+            <textarea
+              onChange={onTyping}
+              value={messageBody}
+              placeholder="type a message..."
+            />
+            <input type="submit" className="submit-btn" value="Send" />
+          </div>
+        </form>
+      </div>
+    )
   );
 };
 
