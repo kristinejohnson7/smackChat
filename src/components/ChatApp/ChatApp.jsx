@@ -3,10 +3,13 @@ import { UserContext } from "../../App";
 import "./ChatApp.css";
 import UserAvatar from "../UserAvatar/UserAvatar";
 import Modal from "../Modal/Modal";
-import { useHistory } from "react-router-dom";
+import ModalBody from "../Modal/ModalBody";
 import Channels from "../Channels/Channels";
 import Chats from "../Chats/Chats";
-import { AVATARS } from "../../constants";
+import Button from "../Button/Button";
+import Nav from "../Nav/Nav";
+import FormBody from "../FormBody/FormBody";
+import AvatarContainer from "../AvatarContainer/AvatarContainer";
 
 const ChatApp = () => {
   const { authService, socketService, chatService } = useContext(UserContext);
@@ -16,7 +19,6 @@ const ChatApp = () => {
     avatarName: authService.avatarName,
     avatarColor: authService.avatarColor,
   };
-  // const history = useHistory();
   const [modal, setModal] = useState(false);
   const [channels, setChannels] = useState([]);
   const [avatarModal, setAvatarModal] = useState(false);
@@ -24,7 +26,6 @@ const ChatApp = () => {
   const [unreadChannels, setUnreadChannels] = useState([]);
   const [updateProfile, setUpdateProfile] = useState(false);
   const [userInfo, setUserInfo] = useState(CURRENT_PROFILE);
-  const [avatarTheme, setAvatarTheme] = useState("Dark");
 
   useEffect(() => {
     socketService.establishConnection();
@@ -52,7 +53,6 @@ const ChatApp = () => {
     setModal(false);
     //fixed memory leak from router not releasing socket io emitters
     window.location = "/login";
-    // history.push("/login", {});
   };
 
   const deleteUser = () => {
@@ -61,7 +61,6 @@ const ChatApp = () => {
     );
     if (result) {
       authService.deleteUser().then(() => logoutUser());
-      // logoutUser();
     }
   };
 
@@ -70,17 +69,11 @@ const ChatApp = () => {
     setUserInfo({ ...userInfo, avatarColor: `#${randomColor}` });
   };
 
-  const chooseAvatar = (avatar) => {
-    setUserInfo({ ...userInfo, avatarName: avatar });
-    setAvatarModal(false);
-  };
-
   const handleUpdateProfile = () => {
     setUpdateProfile(true);
   };
 
   const onProfileUpdate = (e) => {
-    // const { id } = userInfo;
     e.preventDefault();
     const fData = new FormData(e.target);
     const userData = {
@@ -102,16 +95,47 @@ const ChatApp = () => {
     setUpdateProfile(false);
   };
 
-  const { userName, email, avatarName, avatarColor } = userInfo;
+  const { avatarName, avatarColor } = userInfo;
+
+  const editProfile = [
+    {
+      type: "hidden",
+      value: avatarColor,
+      name: "avatarColor",
+      forLabel: "avatarColor",
+    },
+    {
+      type: "hidden",
+      value: avatarName,
+      name: "avatarName",
+      forLabel: "avatarName",
+    },
+    {
+      type: "text",
+      id: "userName",
+      name: "userName",
+      defaultValue: `${authService.name}`,
+      forLabel: "userName",
+      label: "User Name:",
+    },
+    {
+      type: "email",
+      id: "email",
+      name: "email",
+      defaultValue: `${authService.email}`,
+      forLabel: "email",
+      label: "Email: ",
+    },
+  ];
+
+  const chooseAvatar = (avatar) => {
+    setUserInfo({ ...userInfo, avatarName: avatar });
+    setAvatarModal(false);
+  };
+
   return (
     <div className="chat-app">
-      <nav>
-        <h1>Smack Chat</h1>
-        <div className="user-avatar" onClick={() => setModal(true)}>
-          <UserAvatar size="sm" className="nav-avatar" />
-          <div>{authService.name}</div>
-        </div>
-      </nav>
+      <Nav handleClick={() => setModal(true)} />
       <div className="smack-app">
         <Channels
           unread={unreadChannels}
@@ -124,7 +148,6 @@ const ChatApp = () => {
           chats={chatMessages}
         />
       </div>
-
       <Modal title="Profile" isOpen={modal} close={() => setModal(false)}>
         {!updateProfile && (
           <>
@@ -133,56 +156,34 @@ const ChatApp = () => {
               <h4>Username: {userInfo.name}</h4>
               <h4>Email: {userInfo.email}</h4>
             </div>
-            <button
-              onClick={handleUpdateProfile}
-              className="submit-btn delete-btn"
-            >
-              Edit Profile
-            </button>
-            <button onClick={logoutUser} className="submit-btn logout-btn">
-              Logout
-            </button>
-            <button onClick={deleteUser} className="submit-btn delete-btn">
-              Delete User
-            </button>
+            <Button
+              handleOnClick={handleUpdateProfile}
+              title="Edit Profile"
+              cname="profileBtn"
+            />
+            <Button
+              handleOnClick={logoutUser}
+              title="Logout"
+              cname="logoutBtn"
+            />
+            <Button
+              handleOnClick={deleteUser}
+              title="Delete User"
+              cname="deleteBtn"
+            />
           </>
         )}
         {updateProfile && (
           <div>
-            <div className="avatar-container">
-              <UserAvatar
-                avatar={{ avatarName, avatarColor }}
-                className="create-avatar"
-              />
-              <div onClick={() => setAvatarModal(true)} className="avatar-text">
-                Choose avatar
-              </div>
-              <div onClick={generateBgColor} className="avatar-text">
-                Generate background color
-              </div>
-            </div>
-            <form onSubmit={onProfileUpdate}>
-              <input type="hidden" value={avatarColor} name="avatarColor" />
-              <input type="hidden" value={avatarName} name="avatarName" />
-              <label htmlFor="userName">
-                User Name:
-                <input
-                  id="userName"
-                  type="text"
-                  name="userName"
-                  defaultValue={authService.name}
-                />
-              </label>
-              <label htmlFor="email">
-                Email
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  defaultValue={authService.email}
-                />
-              </label>
-              <input type="submit" value="Save Changes" />
+            <AvatarContainer
+              generateBgColor={generateBgColor}
+              setModal={() => setAvatarModal(true)}
+              avatarColor={avatarColor}
+              avatarName={avatarName}
+            />
+            <form onSubmit={onProfileUpdate} className="form">
+              <FormBody formValues={editProfile} />
+              <Button title="Save Changes" cname="submitBtn" />
             </form>
           </div>
         )}
@@ -192,20 +193,7 @@ const ChatApp = () => {
         isOpen={avatarModal}
         close={() => setAvatarModal(false)}
       >
-        <button onClick={() => setAvatarTheme("Dark")}>Dark</button>
-        <button onClick={() => setAvatarTheme("Light")}>Light</button>
-        <div className="avatar-list">
-          {AVATARS.map((img) => (
-            <div
-              role="presentation"
-              key={img}
-              className="create-avatar"
-              onClick={() => chooseAvatar(img)}
-            >
-              <img src={img} alt="avatar" />
-            </div>
-          ))}
-        </div>
+        <ModalBody chooseAvatar={chooseAvatar} />
       </Modal>
     </div>
   );

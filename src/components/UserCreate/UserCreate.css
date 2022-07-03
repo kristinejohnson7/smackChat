@@ -1,23 +1,9 @@
-.avatar-container {
-  text-align: center;
-  margin: 20px 0 40px;
-}
-
-
-.avatar-text {
-  color: var(--sky-blue);
-  transition: ease-in-out 0.2s;
-  line-height: 1.5;
-}
-
-.avatar-text:hover {
-  color: var(--sky-blue-tint);
-  cursor: pointer;
-}
 
 .avatar-list {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
 }
 
 .avatar-list .create-avatar {
@@ -26,7 +12,6 @@
 }
 
 .avatar-list .create-avatar:hover {
-  cursor: pointer;
   opacity: 1;
+  cursor: pointer;
 }
-

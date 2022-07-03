@@ -124,16 +124,22 @@ const Chats = ({ chats, setChannels, channels }) => {
   return (
     channels.map((channel) => channel.id).includes(appSelectedChannel.id) && (
       <div className="chat">
-        <div className="chat-header">
-          <h3>#{appSelectedChannel.name} - </h3>
-          <h4>{appSelectedChannel.description}</h4>
+        <div className="chat-header-container">
+          <div className="chat-header">
+            <h3>#{appSelectedChannel.name} - </h3>
+            <h4>{appSelectedChannel.description}</h4>
+          </div>
+          <div className="channel-delete-container">
+            <button
+              onClick={deleteChannel}
+              className="delete-ch-btn"
+              title="Delete Channel"
+            >
+              <i className="fa-solid fa-trash fa-lg"></i>
+            </button>
+          </div>
         </div>
-        <div className="channel-delete-container">
-          <button onClick={deleteChannel} className="delete-ch-btn">
-            {/* <span className="delete-txt">Delete channel</span> */}
-            <i className="fa-solid fa-trash fa-lg"></i>
-          </button>
-        </div>
+
         <div className="chat-list">
           {!!messages.length ? (
             messages.map((msg) => (

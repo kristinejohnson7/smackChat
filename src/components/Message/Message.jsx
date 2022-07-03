@@ -1,6 +1,9 @@
 import React, { useContext, useState } from "react";
 import UserAvatar from "../UserAvatar/UserAvatar";
 import { UserContext } from "../../App";
+import "./Message.css";
+import editIcon from "../../assets/editicon.svg";
+import trashIcon from "../../assets/trashicon.svg";
 
 export default function Message({
   msg,
@@ -13,7 +16,12 @@ export default function Message({
 
   return (
     <>
-      <div key={msg.id} className="chat-message">
+      <div
+        key={msg.id}
+        className={
+          msg.userId === authService.id ? "sender-chat" : "chat-message"
+        }
+      >
         <UserAvatar
           avatar={{
             avatarName: msg.userAvatar,
@@ -32,6 +40,7 @@ export default function Message({
                 handleUpdateMessage(e, msg.id);
                 setUpdateMessage(false);
               }}
+              className="edit-text-form"
             >
               <input
                 name="updatedMessage"
@@ -42,13 +51,21 @@ export default function Message({
           )}
           {msg.userId === authService.id && (
             <>
-              <button onClick={() => deleteMessage(msg.id)}>Delete</button>
               <button
+                className="delete-msg"
+                onClick={() => deleteMessage(msg.id)}
+                title="Delete message"
+              >
+                <img src={trashIcon} alt="delete-icon" />
+              </button>
+              <button
+                className="edit-icon"
+                title="Edit message"
                 onClick={() => {
                   setUpdateMessage(!updateMessage);
                 }}
               >
-                Edit Msg
+                <img src={editIcon} alt="edit-icon" />
               </button>
             </>
           )}

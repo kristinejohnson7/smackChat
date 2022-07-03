@@ -1,0 +1,62 @@
+.loginContainer {
+  height: 100vh;
+  position: relative;
+}
+
+.loginLogo {
+  width: 350px;
+  padding: 20px;
+}
+
+.loginLogo img {
+  width: 100%;
+}
+
+.heroImg {
+  width: 80%;
+  max-width: 900px;
+  position: relative;
+  bottom: 0;
+  margin: auto;
+  border-bottom: 6px solid var(--primary);
+  box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+}
+
+.heroImg img {
+  width: 100%;
+  position: relative;
+  bottom: -3px;
+
+}
+
+.center-display {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 70px;
+  width: 100%;
+}
+
+.footer-text {
+  padding: 20px;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--primary-nav);
+}
+
+.footer-text a { text-decoration:  none; }
+.footer-text a:hover { text-decoration: underline; }
+
+.alert.alert-danger {
+  color: #721C24;
+  background-color: #F8D7DA;
+  border-color: #F5C6CB;
+  border-left: 5px solid #CC0000;
+}
+
+@media only screen and (max-width: 1000px) {
+  .promoContainer .promoFlex input {
+    width: 70%;
+  }
+}

@@ -1,0 +1,58 @@
+.chat-message, 
+.sender-chat {
+  padding: 9px;
+  margin-bottom: 13px;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.chat-message {
+  display: flex;
+  background: #dee0e3;
+  block-size: fit-content;
+  width: fit-content;
+  margin-left: 10px;
+}
+
+.sender-chat {
+  display: flex;
+  background: rgba(54, 0, 179, 0.1);
+  align-items: center;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+.chat-user {
+  margin-left: 10px;
+}
+
+.chat-user small {
+  color: darkgray;
+  padding-left: 10px;
+}
+
+.message-body {
+  margin-bottom: 3px;
+}
+
+.edit-text-form input {
+  border: 2px solid var(--secondary-var);
+  padding: 3px;
+  border-radius: 3px;
+  background: transparent;
+}
+
+.delete-msg,
+.edit-icon {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 33px;
+  height: 33px;
+}
+
+.edit-icon img, 
+.delete-msg img {
+  width: 100%
+}

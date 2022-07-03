@@ -5,6 +5,12 @@
   padding: 10px;
 }
 
+.chat-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .chat-header {
   display: flex;
   align-items: center;
@@ -24,42 +30,21 @@
   margin-right: 7px;
 }
 
-.channel-delete-container {
-  display: flex;
-  justify-content: end;
-  width: 23px;
-  margin-left: auto;
-}
-
 .delete-ch-btn {
   border: none;
   background: transparent;
   cursor: pointer;
-  margin-right: auto;
+  margin-right: 20px;
   color: grey;
 }
 
 .delete-ch-btn:hover {
-  color: var(--primary-nav);
+  color: var(--secondary-var);
 }
 
 .chat-list {
   overflow: scroll;
   height: calc(100% - 120px)
-}
-
-.chat-message {
-  display: flex;
-  padding-bottom: 15px;
-}
-
-.chat-user {
-  margin-left: 10px;
-}
-
-.chat-user small {
-  color: darkgray;
-  padding-left: 10px;
 }
 
 .chat-bar {
@@ -80,6 +65,14 @@
   border: none;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
 } 
+
+.chat-wrapper input {
+  background-color: var(--secondary);
+  color: var(--primary-nav);
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  font-weight: 600;
+}
 
 .chat-wrapper textarea {
   width: 100%;
