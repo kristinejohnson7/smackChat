@@ -335,18 +335,6 @@ export class SocketService {
           this.chatService.addToUnread(channelId);
         }
         this.chatService.messages = [...this.chatService.messages, chat];
-        // let uniqueMessages = [];
-        // this.chatService.messages.forEach((message) => {
-        //   if (
-        //     !uniqueMessages.find((uniqueMessage) => {
-        //       return uniqueMessage.id === message.id;
-        //     })
-        //   ) {
-        //     uniqueMessages.push(message);
-        //   }
-        // });
-        // console.log("unique", uniqueMessages);
-        // this.chatService.messages = uniqueMessages;
         cb(chat, this.chatService.messages);
       }
     );

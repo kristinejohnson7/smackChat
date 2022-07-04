@@ -56,3 +56,8 @@
 .channel-list {
   padding: 20px 0;
 }
+
+.no-channel {
+  color: white;
+  font-size: 13px;
+}
