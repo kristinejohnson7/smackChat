@@ -3,6 +3,7 @@ import { UserContext } from "../../App";
 import "./Channels.css";
 import Modal from "../Modal/Modal";
 import { toCamelCase } from "../../helpers/camelCase";
+import Button from "../Button/Button";
 
 const Channels = ({ unread, channels, setChannels }) => {
   const INIT = { name: "", description: "" };
@@ -22,10 +23,15 @@ const Channels = ({ unread, channels, setChannels }) => {
   }, [unread]);
 
   useEffect(() => {
-    chatService.findAllChannels().then((res) => {
-      setChannels(res);
-      appSetChannel(res[0]);
-    });
+    chatService
+      .findAllChannels()
+      .then((res) => {
+        setChannels(res);
+        appSetChannel(res[0]);
+      })
+      .catch((error) => {
+        console.error("Finding channels", error);
+      });
   }, []);
 
   useEffect(() => {
@@ -61,7 +67,7 @@ const Channels = ({ unread, channels, setChannels }) => {
         <h3 className="channel-label">
           Channels{" "}
           <span onClick={() => setModal(true)}>
-            <i class="fa-solid fa-plus" title="Add a channel"></i>
+            <i className="fa-solid fa-plus" title="Add a channel"></i>
           </span>
         </h3>
         <div className="channel-list">
@@ -76,7 +82,7 @@ const Channels = ({ unread, channels, setChannels }) => {
               >
                 <div
                   className={`inner ${
-                    appSelectedChannel.id === channel.id ? "selected" : ""
+                    appSelectedChannel?.id === channel?.id ? "selected" : ""
                   }`}
                 >
                   #{channel.name}
@@ -84,7 +90,7 @@ const Channels = ({ unread, channels, setChannels }) => {
               </div>
             ))
           ) : (
-            <div>No Channels. Please add a channel</div>
+            <div className="no-channel">No Channels. Please add a channel</div>
           )}
         </div>
       </div>
@@ -105,7 +111,7 @@ const Channels = ({ unread, channels, setChannels }) => {
             name="description"
             placeholder="enter channel description"
           />
-          <input type="submit" className="submit-btn" value="Create Channel" />
+          <Button cname="submitBtn" title="Create Channel" />
         </form>
       </Modal>
     </>

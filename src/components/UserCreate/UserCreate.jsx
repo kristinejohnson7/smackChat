@@ -4,7 +4,6 @@ import Modal from "../Modal/Modal";
 import "./UserCreate.css";
 import { UserContext } from "../../App";
 import Alert from "../Alert/Alert";
-// import UserAvatar from "../UserAvatar/UserAvatar";
 import ModalBody from "../Modal/ModalBody";
 import Button from "../Button/Button";
 import AvatarContainer from "../AvatarContainer/AvatarContainer";
@@ -31,6 +30,11 @@ const UserCreate = ({ history }) => {
   const generateBgColor = () => {
     const randomColor = Math.floor(Math.random() * 16777215).toString(16);
     setUserInfo({ ...userInfo, avatarColor: `#${randomColor}` });
+  };
+
+  const chooseAvatar = (avatar) => {
+    setUserInfo({ ...userInfo, avatarName: avatar });
+    setAvatarModal(false);
   };
 
   const createUser = (e) => {
@@ -118,11 +122,7 @@ const UserCreate = ({ history }) => {
         isOpen={avatarModal}
         close={() => setAvatarModal(false)}
       >
-        <ModalBody
-          setUserInfo={setUserInfo}
-          userInfo={userInfo}
-          setAvatarModal={setAvatarModal}
-        />
+        <ModalBody chooseAvatar={chooseAvatar} />
       </Modal>
     </>
   );

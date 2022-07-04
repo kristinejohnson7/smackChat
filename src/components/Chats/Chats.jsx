@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import "./Chats.css";
 import { UserContext } from "../../App";
-import UserAvatar from "../UserAvatar/UserAvatar";
 import { formatDate } from "../../helpers/dateFormat";
 import Message from "../Message/Message";
 
@@ -23,10 +22,11 @@ const Chats = ({ chats, setChannels, channels }) => {
   }, [chats]);
 
   useEffect(() => {
-    if (appSelectedChannel.id) {
+    if (appSelectedChannel?.id) {
       chatService
         .findAllMessagesForChannel(appSelectedChannel.id)
-        .then((res) => setMessages(res));
+        .then((res) => setMessages(res))
+        .catch((error) => console.error("Finding messages", error));
     }
   }, [appSelectedChannel]);
 
@@ -95,6 +95,9 @@ const Chats = ({ chats, setChannels, channels }) => {
         .findAllMessagesForChannel(appSelectedChannel.id)
         .then((res) => {
           setMessages(res);
+        })
+        .catch((error) => {
+          console.error("Deleting messages", error);
         });
     });
   };
@@ -107,66 +110,78 @@ const Chats = ({ chats, setChannels, channels }) => {
       ...chatService.messages.find((msg) => msg.id === msgId),
       messageBody: fData.get("updatedMessage"),
     };
-    chatService.updateMessage(msgId, message).then(() => {
-      console.log("then");
-      let newMessages = [];
-      messages.forEach((msg) => {
-        if (msg.id === msgId) {
-          newMessages.push(message);
-        } else {
-          newMessages.push(msg);
-        }
+    chatService
+      .updateMessage(msgId, message)
+      .then(() => {
+        let newMessages = [];
+        messages.forEach((msg) => {
+          if (msg.id === msgId) {
+            newMessages.push(message);
+          } else {
+            newMessages.push(msg);
+          }
+        });
+        setMessages(newMessages);
+      })
+      .catch((error) => {
+        console.error("Updating message", error);
       });
-      setMessages(newMessages);
-    });
   };
 
   return (
-    channels.map((channel) => channel.id).includes(appSelectedChannel.id) && (
-      <div className="chat">
-        <div className="chat-header-container">
-          <div className="chat-header">
-            <h3>#{appSelectedChannel.name} - </h3>
-            <h4>{appSelectedChannel.description}</h4>
-          </div>
-          <div className="channel-delete-container">
-            <button
-              onClick={deleteChannel}
-              className="delete-ch-btn"
-              title="Delete Channel"
-            >
-              <i className="fa-solid fa-trash fa-lg"></i>
-            </button>
-          </div>
-        </div>
+    <>
+      {channels.length ? (
+        channels
+          .map((channel) => channel.id)
+          .includes(appSelectedChannel?.id) && (
+          <div className="chat" key={appSelectedChannel?.id}>
+            <div className="chat-header-container">
+              <div className="chat-header">
+                <h3>#{appSelectedChannel?.name} - </h3>
+                <h4>{appSelectedChannel?.description}</h4>
+              </div>
+              <div className="channel-delete-container">
+                <button
+                  onClick={deleteChannel}
+                  className="delete-ch-btn"
+                  title="Delete Channel"
+                >
+                  <i className="fa-solid fa-trash fa-lg"></i>
+                </button>
+              </div>
+            </div>
 
-        <div className="chat-list">
-          {!!messages.length ? (
-            messages.map((msg) => (
-              <Message
-                msg={msg}
-                deleteMessage={deleteMessage}
-                formatDate={formatDate}
-                handleUpdateMessage={handleUpdateMessage}
-              />
-            ))
-          ) : (
-            <div>No Messages</div>
-          )}
-        </div>
-        <form onSubmit={sendMessage} className="chat-bar">
-          <div className="typing">{typingMessage}</div>
-          <div className="chat-wrapper">
-            <textarea
-              onChange={onTyping}
-              value={messageBody}
-              placeholder="type a message..."
-            />
-            <input type="submit" className="submit-btn" value="Send" />
+            <div className="chat-list">
+              {!!messages.length ? (
+                messages.map((msg) => (
+                  <Message
+                    msg={msg}
+                    deleteMessage={deleteMessage}
+                    formatDate={formatDate}
+                    handleUpdateMessage={handleUpdateMessage}
+                  />
+                ))
+              ) : (
+                <div>No Messages</div>
+              )}
+            </div>
+            <form onSubmit={sendMessage} className="chat-bar">
+              <div className="typing">{typingMessage}</div>
+              <div className="chat-wrapper">
+                <textarea
+                  onChange={onTyping}
+                  value={messageBody}
+                  placeholder="type a message..."
+                />
+                <input type="submit" className="submit-btn" value="Send" />
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
-    )
+        )
+      ) : (
+        <div className="no-chat">No chat messages</div>
+      )}
+    </>
   );
 };
 

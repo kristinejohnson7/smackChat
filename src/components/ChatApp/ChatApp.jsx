@@ -83,15 +83,20 @@ const ChatApp = () => {
       avatarColor: fData.get("avatarColor"),
     };
     setUserInfo(userData);
-    authService.updateUser(userData).then(() => {
-      authService.setUserData({
-        _id: authService.id,
-        name: userData.name,
-        email: userData.email,
-        avatarName: userData.avatarName,
-        avatarColor: userData.avatarColor,
+    authService
+      .updateUser(userData)
+      .then(() => {
+        authService.setUserData({
+          _id: authService.id,
+          name: userData.name,
+          email: userData.email,
+          avatarName: userData.avatarName,
+          avatarColor: userData.avatarColor,
+        });
+      })
+      .catch((error) => {
+        console.error("Update profile", error);
       });
-    });
     setUpdateProfile(false);
   };
 
