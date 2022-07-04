@@ -276,6 +276,7 @@ export class SocketService {
 
   addChannel(name, description) {
     this.socket.emit("newChannel", name, description);
+    console.log("channel added", name);
   }
 
   getChannel(cb) {

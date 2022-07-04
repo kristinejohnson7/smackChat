@@ -173,7 +173,10 @@ const Chats = ({ chats, setChannels, channels }) => {
                   value={messageBody}
                   placeholder="type a message..."
                 />
-                <input type="submit" className="submit-btn" value="Send" />
+                <button className="submit-btn">
+                  <i class="fa-solid fa-paper-plane"></i>
+                  SEND
+                </button>
               </div>
             </form>
           </div>

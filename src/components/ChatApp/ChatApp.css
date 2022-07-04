@@ -10,5 +10,11 @@
 
 .smack-app {
   display: flex;
-  height: calc(100vh - 70px);
+  height: calc(100vh - 80px);
+}
+
+@media only screen and (max-width: 500px) {
+  .smack-app {
+    flex-direction: column;
+  }
 }

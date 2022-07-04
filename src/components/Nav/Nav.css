@@ -40,3 +40,15 @@
 .user-avatar:hover .nav-avatar {
   opacity: 0.8;
 }
+
+@media only screen and (max-width: 400px) {
+  .chat-app nav {
+    flex-direction: column;
+    height: initial;
+    padding-bottom: 25px;
+  }
+
+  .user-avatar {
+    position: inherit;
+  }
+}
