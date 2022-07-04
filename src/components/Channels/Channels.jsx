@@ -46,12 +46,7 @@ const Channels = ({ unread, channels, setChannels }) => {
     setUnreadChannels(unread);
   };
 
-  const onChange = ({ target: { name, value } }) => {
-    setNewChannel({ ...newChannel, [name]: value });
-  };
-
   const createChannel = (e) => {
-    console.log("new channel", newChannel);
     e.preventDefault();
     const fData = new FormData(e.target);
     const channelData = {
@@ -106,14 +101,12 @@ const Channels = ({ unread, channels, setChannels }) => {
       <Modal title="Create Channel" isOpen={modal} close={setModal}>
         <form className="form channel-form" onSubmit={createChannel}>
           <input
-            // onChange={onChange}
             type="text"
             className="form-control"
             name="name"
             placeholder="enter channel name"
           />
           <input
-            // onChange={onChange}
             type="text"
             className="form-control"
             name="description"

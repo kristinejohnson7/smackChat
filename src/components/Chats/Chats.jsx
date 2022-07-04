@@ -104,7 +104,6 @@ const Chats = ({ chats, setChannels, channels }) => {
 
   const handleUpdateMessage = (e, msgId) => {
     e.preventDefault();
-    console.log("handle update message");
     const fData = new FormData(e.target);
     const message = {
       ...chatService.messages.find((msg) => msg.id === msgId),
