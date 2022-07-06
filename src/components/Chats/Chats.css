@@ -61,31 +61,31 @@
 }
 
 .chat-wrapper textarea, 
-.chat-wrapper input {
+.chat-wrapper button {
   border: none;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
 } 
 
-.chat-wrapper input {
+.chat-wrapper button {
   background-color: var(--secondary);
   color: var(--primary-nav);
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   font-weight: 600;
+  cursor: pointer;
+  width: 100px;
+}
+
+.chat-wrapper button i {
+  margin-right: 5px;
 }
 
 .chat-wrapper textarea {
   width: 100%;
   padding: 15px;
   border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-left-radius: 5px; 
   font-family: 'Anek Latin', sans-serif;
-}
-
-.chat-wrapper input[type="submit"] {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  width: 100px;
 }
 
 .typing {

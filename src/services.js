@@ -303,7 +303,6 @@ export class SocketService {
   }
 
   getChatMessage(cb) {
-    console.log("get chat msg sent");
     this.socket.on(
       "messageCreated",
       (
@@ -316,7 +315,6 @@ export class SocketService {
         id,
         timeStamp
       ) => {
-        console.log("socket was emitted");
         const channel = this.chatService.getSelectedChannel();
         const chat = {
           messageBody,
